@@ -11,13 +11,14 @@ import java.util.function.Function;
 public class SpringCfApplication {
 
 	@Bean
-	public Function<Flux<String>, Flux<String>> uppercase() {
-		return flux -> flux.map(String::toUpperCase);
+//	public Function<Flux<String>, Flux<String>> uppercase() {
+	public Function<String, String> uppercase() {
+		return value -> value.toUpperCase();
 	}
 
 
 	@Bean
-	public Function<String, String> reverseString() {
+	public Function<String, String> reversestring() {
 		return value -> new StringBuilder(value).reverse().toString();
 	}
 
