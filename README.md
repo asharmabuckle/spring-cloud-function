@@ -20,7 +20,7 @@ reactive programming can be implemented using `java.util.Function` type.
 2. Above is true only when there is only ONE component. In this example, it is important to autowire both components
    because
    framework will not be able to create bean and no function will be exposed.
-3. Consumer and Supplier types can be implemented in a similar fashion so can the
+3. Consumer and Supplier types can be implemented in a similar fashion with reactive types
 
 ### Test this branch
 
