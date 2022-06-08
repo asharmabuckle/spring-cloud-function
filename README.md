@@ -2,10 +2,10 @@
 
 ### Function Composition
 
-This branch uses the basic declarative function composition and adds `spring.cloud.function.definition` to the properties to demonstrate 
-compositions (or chairing) of different functions.
+This branch uses the showcases declarative function composition by adding `spring.cloud.function.definition` to the properties to  
+compose different functions.
 
-**Note**: Notice how the function declaration of `uppercase` have changed. Without a uniform I/O definitions such a function
+**Note:** Notice how the function declaration of `uppercase` has changed. Without a uniform function definitions such a function
 composition is not possible
 
 ### Test this branch
