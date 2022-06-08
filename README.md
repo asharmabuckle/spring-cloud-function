@@ -13,7 +13,7 @@ In a nutshell, this implementation take the composition from properties file and
 complex
 reactive programming can be implemented using `java.util.Function` type.
 
-**Note**: Few curious observations, also noted in official documentations
+**Note:** Few curious observations, also noted in official documentations
 
 1. When Functions are implemented as a separate component, Spring Serverless will try to scan the packages and create a
    function bean
@@ -33,5 +33,7 @@ reactive programming can be implemented using `java.util.Function` type.
 ### Reference Documentation
 
 [Main dependencies and basic structure](https://www.baeldung.com/spring-cloud-function)
+
 [Basic Function Examples](https://mkyong.com/java8/java-8-function-examples/)
+
 [AWS Lambda context](https://stackoverflow.com/questions/53452675/multiple-spring-cloud-functions-in-one-project-for-deployment-on-aws-lambda)
