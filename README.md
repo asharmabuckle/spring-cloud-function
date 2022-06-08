@@ -31,7 +31,4 @@ reactive programming can be implemented using `java.util.Function` type.
     * `curl -H "Content-Type: text/plain" localhost:8080/reversestring -d 'Buckle. Before Anything Else'`
 
 ### Reference Documentation
-
-[Main dependencies and basic structure](https://www.baeldung.com/spring-cloud-function)
-[Basic Function Examples](https://mkyong.com/java8/java-8-function-examples/)
-[AWS Lambda context](https://stackoverflow.com/questions/53452675/multiple-spring-cloud-functions-in-one-project-for-deployment-on-aws-lambda)
+[Official Spring AWS Lambda Documentation](https://docs.spring.io/spring-cloud-function/docs/current/reference/html/aws.html)

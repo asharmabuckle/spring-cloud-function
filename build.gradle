@@ -1,12 +1,38 @@
-plugins {
-	id 'org.springframework.boot' version '2.7.0'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+buildscript {
+	ext {
+		springBootVersion = '2.7.0'
+		wrapperVersion = '1.0.28.RELEASE'
+		shadowVersion = '7.1.2'
+	}
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath "gradle.plugin.com.github.johnrengelman:shadow:${shadowVersion}"
+		classpath "org.springframework.boot.experimental:spring-boot-thin-gradle-plugin:${wrapperVersion}"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+	}
 }
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'eclipse'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'org.springframework.boot.experimental.thin-launcher'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'com.buckle.poc.spring-cf'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+targetCompatibility = '11'
 
 configurations {
 	compileOnly {
@@ -15,29 +41,75 @@ configurations {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
 }
 
-jar{
+jar {
 	enabled = false
 }
 
 ext {
-	set('springCloudVersion', "2021.0.3")
+	springCloudFunctionVersion = "2021.0.3"
+	awsLambdaEventsVersion = '3.11.0'
+	awsLambdaCoreVersion = '1.2.1'
 }
 
-dependencies {
-	implementation 'org.springframework.cloud:spring-cloud-starter-function-web'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+ext['reactor.version'] = "3.1.7.RELEASE"
+
+assemble.dependsOn = [shadowJar, thinJar]
+
+jar {
+	enabled = false
+	manifest {
+		// Main class to be updated as needed.
+		// This should point to the class with @SpringBootApplication annotation
+		attributes 'Main-Class': 'com.buckle.poc.springcf.SpringCfApplication'
+	}
+}
+
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+
+shadowJar {
+	// Postfix for your jar. Can be any unique identifier for CI/CD purposes
+	archiveClassifier = 'lambda'
+	dependencies {
+		exclude(
+				dependency("org.springframework.cloud:spring-cloud-function-web:${springCloudFunctionVersion}"))
+	}
+	// Required for Spring
+	mergeServiceFiles()
+	append 'META-INF/spring.handlers'
+	append 'META-INF/spring.schemas'
+	append 'META-INF/spring.tooling'
+	transform(PropertiesFileTransformer) {
+		paths = ['META-INF/spring.factories']
+		mergeStrategy = "append"
+	}
+}
+
+configurations {
+	testCompile.extendsFrom(compileOnly)
 }
 
 dependencyManagement {
 	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudFunctionVersion}"
 	}
+}
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter-function-web'
+	implementation 'org.springframework.cloud:spring-cloud-function-adapter-aws'
+	compileOnly 'org.projectlombok:lombok'
+	compileOnly("com.amazonaws:aws-lambda-java-events:${awsLambdaEventsVersion}")
+	compileOnly("com.amazonaws:aws-lambda-java-core:${awsLambdaCoreVersion}")
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
