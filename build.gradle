@@ -47,10 +47,6 @@ repositories {
 	maven { url "https://repo.spring.io/milestone" }
 }
 
-jar {
-	enabled = false
-}
-
 ext {
 	springCloudFunctionVersion = "2021.0.3"
 	awsLambdaEventsVersion = '3.11.0'

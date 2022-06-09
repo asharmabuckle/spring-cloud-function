@@ -1,34 +1,58 @@
 ## Spring Cloud Function POC
 
-### Function Composition - 2
+### AWS Lambda Ready
 
-This is a different flavour to showcase function composition and will be used as baseline for AWS lambda implementation.
+Building upon func-composition-2, a locally workable Cloud Function, this branch makes the implementation
+_workable_ as an AWS lambda function. There are no code changes in this branch; instead all the changes are in
+build.gradle.
 
-The case and reverse functions have been implemented as a spring component which now can be autowired into the main
-class.
-`CompositeFunction` uses the 2 to compose a complex function and it this function which has become a default definition
-for this application.
+Compiling this application will produce 2 jar files:
 
-In a nutshell, this implementation take the composition from properties file and puts in code as an example that more
-complex
-reactive programming can be implemented using `java.util.Function` type.
+* spring-cf-0.0.1-SNAPSHOT.jar
+* spring-cf-0.0.1-SNAPSHOT-lambda.jar
 
-**Note**: Few curious observations, also noted in official documentations
+The second jar comes with whichever postfix we define in `archiveClassifier` in build.gradle (#74).
 
-1. When Functions are implemented as a separate component, Spring Serverless will try to scan the packages and create a
-   function bean
-2. Above is true only when there is only ONE component. In this example, it is important to autowire both components
-   because
-   framework will not be able to create bean and no function will be exposed.
-3. Consumer and Supplier types can be implemented in a similar fashion with reactive types
+_It is this second file which is uploaded to AWS lambda environment._ Notice the difference in the size of both JAR
+files.
+
+**Salient Features:**
+
+1. Making this function compatible with AWS Lambda environment, **no** java code changes are required and the SpringBoot
+   application remains _cloud-agnostic_
+2. This is made possible from the spring-cloud-function-adapter-aws onwards, simply set the handler as
+   `org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest`, and let the framework do the rest
+3. Even though this application has multiple functions, AWS Lambda can execute only function, which is defined in our
+   properties file `spring.cloud.function.definition`. This is also
+   noted [here](https://docs.spring.io/spring-cloud-function/docs/current/reference/html/aws.html#_aws_request_handlers)
+   .
+4. Since AWS needs a shaded jar to run, this is done by using gradle plidings `com.github.johnrengelman.shadow`
+   and `org.springframework.boot.experimental.thin-launcher`
+
+**Caution:**
+As of writing of this readme, the build script repositories and classpath dependencies are _**incorrect**_ in official
+documentations.
+The correct integration is described [here](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow), and same
+are implemented in this POC.
+
+The source of this confusion is (I think) is rooted in the namespace updated made my the owner of the plugin, somewhere
+around v5.x.x.
 
 ### Test this branch
 
-* `CompositeFunction` can be invoked at the
-  root `curl -H "Content-Type: text/plain" localhost:8080/ -d 'Buckle. Before Anything Else'`
+* AWS Lambda function is deployed in dataluss-np account, function name spring-cf. This function is also exposed using
+  function URL
+    *
+
 * Other functions can still be invoked from their relative paths
-    * `curl -H "Content-Type: text/plain" localhost:8080/uppercase -d 'Buckle. Before Anything Else'`
-    * `curl -H "Content-Type: text/plain" localhost:8080/reversestring -d 'Buckle. Before Anything Else'`
+    * CompositeFunction `curl -H "Content-Type: text/plain" localhost:8080/ -d 'Buckle. Before Anything Else'`
+    * Upper Case `curl -H "Content-Type: text/plain" localhost:8080/uppercase -d 'Buckle. Before Anything Else'`
+    * Reverse String `curl -H "Content-Type: text/plain" localhost:8080/reversestring -d 'Buckle. Before Anything Else'`
 
 ### Reference Documentation
+
 [Official Spring AWS Lambda Documentation](https://docs.spring.io/spring-cloud-function/docs/current/reference/html/aws.html)
+
+[SpringBoot Thin Launcher](https://github.com/spring-projects-experimental/spring-boot-thin-launcher)
+
+[**Working** Shade Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
