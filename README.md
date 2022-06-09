@@ -42,7 +42,9 @@ around v5.x.x.
 
 * AWS Lambda function is deployed in dataluss-np account, function name spring-cf. This function is also exposed using
   function URL
-    *
+  - `curl --location --request GET 'https://klej3attpxuzdjtbncxb36q2y40jkpgf.lambda-url.us-west-2.on.aws/' \
+  --header 'Content-Type: text/plain' \
+  --data-raw '"Buckle. Before Anything Else"'`
 
 * Other functions can still be invoked from their relative paths
     * CompositeFunction `curl -H "Content-Type: text/plain" localhost:8080/ -d 'Buckle. Before Anything Else'`
