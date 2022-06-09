@@ -18,15 +18,15 @@ files.
 
 **Salient Features:**
 
-1. Making this function compatible with AWS Lambda environment, **no** java code changes are required and the SpringBoot
+1. Making this function compatible with AWS Lambda environment requires **no** java code changes are required and the SpringBoot
    application remains _cloud-agnostic_
-2. This is made possible from the spring-cloud-function-adapter-aws onwards, simply set the handler as
+2. This is made possible by the latest spring-cloud-function-adapter-aws dependency; simply set the handler as
    `org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest`, and let the framework do the rest
 3. Even though this application has multiple functions, AWS Lambda can execute only function, which is defined in our
    properties file `spring.cloud.function.definition`. This is also
    noted [here](https://docs.spring.io/spring-cloud-function/docs/current/reference/html/aws.html#_aws_request_handlers)
    .
-4. Since AWS needs a shaded jar to run, this is done by using gradle plidings `com.github.johnrengelman.shadow`
+4. Since AWS needs a shaded jar to run, this is done by using gradle plugins `com.github.johnrengelman.shadow`
    and `org.springframework.boot.experimental.thin-launcher`
 
 **Caution:**
