@@ -17,8 +17,7 @@ POJO (jsonified by framework).
 
 * AWS Lambda function is deployed in dataluss-np account, function name spring-cf. This function is also exposed using
   function URL
-  - `curl --location --request GET 'https://klej3attpxuzdjtbncxb36q2y40jkpgf.lambda-url.us-west-2.on.aws/' \
-    --data-raw '''`
+  - `curl --location --request GET 'https://klej3attpxuzdjtbncxb36q2y40jkpgf.lambda-url.us-west-2.on.aws/'`
 
 * Other functions can still be invoked from their relative paths
   * JPAasSupplier `curl localhost:8080/jpasupplier`
