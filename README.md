@@ -12,6 +12,8 @@ Supplier is used.
 Demonstrating a JPA and JDBC connectivity to a postgres RDS DB, this function is queries ROWCOUNT and returns a
 POJO (jsonified by framework).
 
+**Caution:**
+JPA required considerably high memory than JDBC. For the POC the lambda function is set to 1 GB.
 
 ### Test this branch
 
