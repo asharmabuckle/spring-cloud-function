@@ -13,7 +13,7 @@ Demonstrating a JPA and JDBC connectivity to a postgres RDS DB, this function is
 POJO (jsonified by framework).
 
 **Caution:**
-JPA required considerably high memory than JDBC. For the POC the lambda function is set to 1 GB.
+JPA required considerably high memory than JDBC. For this POC the lambda function is set to 1 GB.
 
 ### Test this branch
 
