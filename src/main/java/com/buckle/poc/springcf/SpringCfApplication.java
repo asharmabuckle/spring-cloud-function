@@ -1,9 +1,10 @@
 package com.buckle.poc.springcf;
 
+import com.buckle.poc.springcf.packagedfunc.JDBCasSupplier;
+import com.buckle.poc.springcf.packagedfunc.JPAasSupplier;
 import com.buckle.poc.springcf.packagedfunc.ReverseString;
 import com.buckle.poc.springcf.packagedfunc.UpperCase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,12 +15,15 @@ import java.util.function.Function;
 public class SpringCfApplication {
 
 	@Autowired
-	@Qualifier("uppercase")
-	UpperCase uppercase;
+	UpperCase upperCase;
+	@Autowired
+	ReverseString reverseString;
 
 	@Autowired
-	@Qualifier("reversestring")
-	ReverseString reversestring;
+	JPAasSupplier jpAasSupplier;
+
+	@Autowired
+	JDBCasSupplier jdbCasSupplier;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringCfApplication.class, args);
@@ -27,6 +31,6 @@ public class SpringCfApplication {
 
 	@Bean
 	Function<String, String> compositeFunction() {
-		return value -> uppercase.compose(reversestring).apply(value);
+		return value -> upperCase.compose(reverseString).apply(value);
 	}
 }
