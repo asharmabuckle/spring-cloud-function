@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class JDBCasSupplier implements Supplier<DBQueryResponse> {
 
     @Autowired
-    JdbcTemplate rdsJdbcTemplate;
+    public JdbcTemplate rdsJdbcTemplate;
 
     String query = "SELECT COUNT(*) FROM pch.contract_details";
 

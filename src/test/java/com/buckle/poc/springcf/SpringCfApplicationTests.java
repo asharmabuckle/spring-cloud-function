@@ -9,5 +9,4 @@ class SpringCfApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
